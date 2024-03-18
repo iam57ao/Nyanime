@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: nyanime
+  profiles:
+    active: dev
+  datasource:
+    url: jdbc:mysql://${nyanime.datasource.host}:${nyanime.datasource.port}/${nyanime.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    driver-class-name: ${nyanime.datasource.driver-class-name}
+    username: ${nyanime.datasource.username}
+    password: ${nyanime.datasource.password}
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+springdoc:
+  swagger-ui:
+    enabled: ${nyanime.swagger.enable}
+    path: ${nyanime.swagger.path}
