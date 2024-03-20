@@ -10,6 +10,8 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import java.util.Objects;
+
 /**
  * @author iam57
  * @since 2024-03-19 20:37:10
@@ -23,7 +25,7 @@ public class ResponseBodyHandler implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(Object body, @NonNull MethodParameter returnType, @NonNull MediaType selectedContentType, @NonNull Class<? extends HttpMessageConverter<?>> selectedConverterType, @NonNull ServerHttpRequest request, @NonNull ServerHttpResponse response) {
-        if (body == null) {
+        if (Objects.isNull(body)) {
             return HttpResult.success();
         }
         return HttpResult.success(body);
