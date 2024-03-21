@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.ibatis.annotations.Insert;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -24,10 +25,10 @@ public class Anime implements Serializable {
     private String bangumiId;
     private String animeName;
     private String animeNameCn;
-    private Byte animeType;
+    private Integer animeType;
     private Integer episodes;
     private LocalDate date;
-    private Byte week;
+    private Insert week;
     private String summary;
     private String image;
 }

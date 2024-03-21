@@ -23,7 +23,7 @@ public class UserAnime implements Serializable {
     private Integer id;
     private Integer userId;
     private Integer animeId;
-    private Byte status;
+    private Integer status;
     private LocalDate createTime;
     private LocalDate updateTime;
 }
