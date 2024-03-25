@@ -1,6 +1,6 @@
 package com.iam57.nyanime.init;
 
-import com.iam57.nyanime.service.AdminUserService;
+import com.iam57.nyanime.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
@@ -15,11 +15,11 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 public class SuperAdminInitRunner implements ApplicationRunner {
-    private AdminUserService adminUserService;
+    private UserService userService;
 
     @Override
     public void run(ApplicationArguments args) {
-        if (adminUserService.initSuperAdminUser()) {
+        if (userService.initSuperAdminUser()) {
             log.info("初始化超级管理员账号完成!");
         }
     }

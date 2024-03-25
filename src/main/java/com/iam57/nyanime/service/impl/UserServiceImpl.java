@@ -2,9 +2,14 @@ package com.iam57.nyanime.service.impl;
 
 import com.iam57.nyanime.common.constant.UserSexConstant;
 import com.iam57.nyanime.common.constant.UserTypeConstant;
+import com.iam57.nyanime.common.enumeration.BusinessStatusEnum;
+import com.iam57.nyanime.common.exception.NyanimeLoginException;
 import com.iam57.nyanime.mapper.UserMapper;
+import com.iam57.nyanime.pojo.dto.UserLoginDTO;
 import com.iam57.nyanime.pojo.entity.User;
-import com.iam57.nyanime.service.AdminUserService;
+import com.iam57.nyanime.properties.JWTProperties;
+import com.iam57.nyanime.service.UserService;
+import com.iam57.nyanime.util.JWTUtil;
 import com.iam57.nyanime.util.StringUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +17,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author iam57
@@ -20,7 +28,8 @@ import java.time.LocalDateTime;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class AdminUserServiceImpl implements AdminUserService {
+public class UserServiceImpl implements UserService {
+    private JWTProperties jwtProperties;
     private PasswordEncoder passwordEncoder;
     private UserMapper userMapper;
 
@@ -48,5 +57,25 @@ public class AdminUserServiceImpl implements AdminUserService {
         log.info("用户名: {}", userName);
         log.info("密码: {}", rawPassword);
         return true;
+    }
+
+    @Override
+    public String login(UserLoginDTO userLoginDTO) {
+        String userName = userLoginDTO.getUserName();
+        User user = userMapper.getByUserName(userName);
+        if (Objects.isNull(user)) {
+            log.info("不存在的用户 {} 尝试登录!", userName);
+            throw new NyanimeLoginException(BusinessStatusEnum.USER_NOT_EXISTS);
+        }
+        String rawPassword = userLoginDTO.getPassword();
+        String encodedPassword = user.getPassword();
+        if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
+            log.info("用户 {} 尝试登录,但密码错误!", userName);
+            throw new NyanimeLoginException(BusinessStatusEnum.PASSWORD_ERROR);
+        }
+        Map<String, Object> claim = new HashMap<>();
+        claim.put("id", user.getId());
+        claim.put("type", user.getUserType());
+        return JWTUtil.createToken(claim, jwtProperties.getSecret(), jwtProperties.getExpireTime());
     }
 }

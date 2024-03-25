@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.iam57.nyanime.mapper.UserMapper">
-    <select id="countByUserType" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    <select id="countByUserType" resultType="java.lang.Integer">
         SELECT COUNT(*)
         FROM nyani_user
         WHERE user_type = #{userType}
     </select>
-    <insert id="insert" parameterType="com.iam57.nyanime.pojo.entity.User">
+    <select id="getByUserName" resultType="com.iam57.nyanime.pojo.entity.User">
+        SELECT *
+        FROM nyani_user
+        WHERE user_name = #{userName}
+    </select>
+    <insert id="insert">
         INSERT INTO nyani_user (user_name, sex, password, avatar, email, create_time, update_time, user_type)
         VALUES (#{userName}, #{sex}, #{password}, #{avatar}, #{email}, #{createTime}, #{updateTime}, #{userType})
     </insert>

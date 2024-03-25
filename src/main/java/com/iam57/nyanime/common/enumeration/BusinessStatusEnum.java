@@ -11,7 +11,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum BusinessStatusEnum {
     SUCCESS(0, "成功!"),
-    ERROR(-1, "未知错误!");
+    ERROR(-1, "未知错误!"),
+    USER_NOT_EXISTS(-2001, "用户不存在!"),
+    PASSWORD_ERROR(-2002, "密码错误!");
     private final Integer code;
     private final String message;
 }

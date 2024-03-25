@@ -12,4 +12,6 @@ public interface UserMapper {
     Integer countByUserType(Integer userType);
 
     void insert(User user);
+
+    User getByUserName(String userName);
 }
