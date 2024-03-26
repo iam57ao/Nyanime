@@ -2,6 +2,7 @@ package com.iam57.nyanime.util;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.Claim;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -21,11 +22,14 @@ public class JWTUtil {
                 .sign(Algorithm.HMAC256(secret));
     }
 
-    public static Map<String, Claim> parseJWT(String token, String secret) {
-        return JWT.require(Algorithm.HMAC256(secret))
-                .build()
-                .verify(token)
-                .getClaims();
+    public static boolean parseJWT(String token) {
+        try {
+            JWT.decode(token);
+        } catch (JWTDecodeException jwtDecodeException) {
+            return false;
+        }
+        return true;
+
     }
 
     public static Map<String, Claim> getClaims() {
