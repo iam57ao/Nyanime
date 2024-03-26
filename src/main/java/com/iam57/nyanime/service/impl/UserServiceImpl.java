@@ -7,12 +7,14 @@ import com.iam57.nyanime.common.exception.NyanimeLoginException;
 import com.iam57.nyanime.mapper.UserMapper;
 import com.iam57.nyanime.pojo.dto.UserLoginDTO;
 import com.iam57.nyanime.pojo.entity.User;
+import com.iam57.nyanime.pojo.vo.UserVO;
 import com.iam57.nyanime.properties.JWTProperties;
 import com.iam57.nyanime.service.UserService;
 import com.iam57.nyanime.util.JWTUtil;
 import com.iam57.nyanime.util.StringUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -73,9 +75,18 @@ public class UserServiceImpl implements UserService {
             log.info("用户 {} 尝试登录,但密码错误!", userName);
             throw new NyanimeLoginException(BusinessStatusEnum.PASSWORD_ERROR);
         }
+        log.info("用户 {} 登录成功!", userName);
         Map<String, Object> claim = new HashMap<>();
         claim.put("id", user.getId());
-        claim.put("type", user.getUserType());
+        claim.put("user_type", user.getUserType());
         return JWTUtil.createToken(claim, jwtProperties.getSecret(), jwtProperties.getExpireTime());
+    }
+
+    @Override
+    public UserVO getById(Integer id) {
+        User user = userMapper.getById(id);
+        UserVO userVO = new UserVO();
+        BeanUtils.copyProperties(user, userVO);
+        return userVO;
     }
 }

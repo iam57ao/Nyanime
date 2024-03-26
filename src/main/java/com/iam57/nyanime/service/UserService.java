@@ -1,6 +1,7 @@
 package com.iam57.nyanime.service;
 
 import com.iam57.nyanime.pojo.dto.UserLoginDTO;
+import com.iam57.nyanime.pojo.vo.UserVO;
 
 /**
  * @author iam57
@@ -8,5 +9,8 @@ import com.iam57.nyanime.pojo.dto.UserLoginDTO;
  */
 public interface UserService {
     boolean initSuperAdminUser();
+
     String login(UserLoginDTO userLoginDTO);
+
+    UserVO getById(Integer id);
 }

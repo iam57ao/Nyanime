@@ -1,13 +1,20 @@
 package com.iam57.nyanime.controller.user;
 
+import com.auth0.jwt.interfaces.Claim;
 import com.iam57.nyanime.pojo.dto.UserLoginDTO;
+import com.iam57.nyanime.pojo.vo.UserVO;
 import com.iam57.nyanime.service.UserService;
+import com.iam57.nyanime.util.JWTUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 /**
  * @author iam57
@@ -16,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "用户相关接口")
 @Slf4j
 @RestController
+@RequestMapping("/user")
 @AllArgsConstructor
 public class UserController {
     private UserService userService;
@@ -24,5 +32,13 @@ public class UserController {
     @PostMapping("/login")
     public String login(UserLoginDTO userLoginDTO) {
         return userService.login(userLoginDTO);
+    }
+
+    @Operation(summary = "个人信息")
+    @GetMapping
+    public UserVO info() {
+        Map<String, Claim> claims = JWTUtil.getClaims();
+        Integer id = claims.get("id").asInt();
+        return userService.getById(id);
     }
 }

@@ -15,6 +15,10 @@ import java.util.Map;
  * @since 2024-03-25 18:59:11
  */
 public class JWTUtil {
+    private static String getTokenByTokenHeader(String tokenHeader) {
+        return tokenHeader.replace("Bearer ", "");
+    }
+
     public static String createToken(Map<String, Object> claims, String secret, Long ttlMillis) {
         return JWT.create()
                 .withPayload(claims)
@@ -22,7 +26,8 @@ public class JWTUtil {
                 .sign(Algorithm.HMAC256(secret));
     }
 
-    public static boolean parseJWT(String token) {
+    public static boolean parseJWT(String tokenHeader) {
+        String token = getTokenByTokenHeader(tokenHeader);
         try {
             JWT.decode(token);
         } catch (JWTDecodeException jwtDecodeException) {
@@ -35,7 +40,8 @@ public class JWTUtil {
     public static Map<String, Claim> getClaims() {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         assert requestAttributes != null;
-        String token = requestAttributes.getRequest().getHeader("Authorization");
+        String tokenHeader = requestAttributes.getRequest().getHeader("Authorization");
+        String token = getTokenByTokenHeader(tokenHeader);
         return JWT.decode(token).getClaims();
     }
 }
