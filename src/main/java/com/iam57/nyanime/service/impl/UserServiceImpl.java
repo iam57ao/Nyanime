@@ -44,11 +44,11 @@ public class UserServiceImpl implements UserService {
         }
         //创建管理员账号
         log.info("超级管理员用户不存在, 正在创建...");
-        String userName = StringUtil.randomString(5);
+        String username = StringUtil.randomString(5);
         String rawPassword = StringUtil.randomString(16);
         String encodedPassword = passwordEncoder.encode(rawPassword);
         User user = User.builder()
-                .userName(userName)
+                .username(username)
                 .password(encodedPassword)
                 .sex(UserSexConstant.OTHER)
                 .userType(UserTypeConstant.SUPER_ADMIN)
@@ -56,14 +56,14 @@ public class UserServiceImpl implements UserService {
                 .updateTime(LocalDateTime.now())
                 .build();
         userMapper.insert(user);
-        log.info("用户名: {}", userName);
+        log.info("用户名: {}", username);
         log.info("密码: {}", rawPassword);
         return true;
     }
 
     @Override
     public String login(UserLoginDTO userLoginDTO) {
-        String userName = userLoginDTO.getUserName();
+        String userName = userLoginDTO.getUsername();
         User user = userMapper.getByUserName(userName);
         if (Objects.isNull(user)) {
             log.info("不存在的用户 {} 尝试登录!", userName);

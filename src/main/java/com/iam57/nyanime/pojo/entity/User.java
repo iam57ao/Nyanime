@@ -19,11 +19,11 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class User implements Serializable {
     @Serial
-    private static final long serialVersionUID = -4389108856096399423L;
+    private static final long serialVersionUID = 4278176330966428633L;
     private Integer id;
     private Integer sex;
     private Integer userType;
-    private String userName;
+    private String username;
     private String password;
     private String avatar;
     private String email;

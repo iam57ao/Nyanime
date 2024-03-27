@@ -23,7 +23,7 @@ public class UserVO implements Serializable {
     private Integer id;
     private Integer sex;
     private Integer userType;
-    private String userName;
+    private String username;
     private String avatar;
     private String email;
     private LocalDateTime createTime;

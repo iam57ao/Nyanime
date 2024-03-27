@@ -14,10 +14,10 @@
     <select id="getByUserName" resultType="com.iam57.nyanime.pojo.entity.User">
         SELECT *
         FROM nyani_user
-        WHERE user_name = #{userName}
+        WHERE username = #{username}
     </select>
     <insert id="insert">
-        INSERT INTO nyani_user (user_name, sex, password, avatar, email, create_time, update_time, user_type)
-        VALUES (#{userName}, #{sex}, #{password}, #{avatar}, #{email}, #{createTime}, #{updateTime}, #{userType})
+        INSERT INTO nyani_user (username, sex, password, avatar, email, create_time, update_time, user_type)
+        VALUES (#{username}, #{sex}, #{password}, #{avatar}, #{email}, #{createTime}, #{updateTime}, #{userType})
     </insert>
 </mapper>
