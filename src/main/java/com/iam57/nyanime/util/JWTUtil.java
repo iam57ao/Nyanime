@@ -4,43 +4,49 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.Claim;
+import com.iam57.nyanime.properties.JWTProperties;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author iam57
  * @since 2024-03-25 18:59:11
  */
+@Component
+@AllArgsConstructor
 public class JWTUtil {
-    private static String getTokenByTokenHeader(String tokenHeader) {
+    private JWTProperties jwtProperties;
+
+    private String getTokenByTokenHeader(String tokenHeader) {
         return tokenHeader.replace("Bearer ", "");
     }
 
-    public static String createToken(Map<String, Object> claims, String secret, Long ttlMillis) {
+    public String createToken(Map<String, Object> claims) {
         return JWT.create()
                 .withPayload(claims)
-                .withExpiresAt(new Date().toInstant().plusMillis(ttlMillis))
-                .sign(Algorithm.HMAC256(secret));
+                .withExpiresAt(new Date().toInstant().plusMillis(jwtProperties.getExpireTime()))
+                .sign(Algorithm.HMAC256(jwtProperties.getSecret()));
     }
 
-    public static boolean parseJWT(String tokenHeader) {
-        String token = getTokenByTokenHeader(tokenHeader);
+    public boolean parseJWT(String tokenHeader) {
+        String token = this.getTokenByTokenHeader(tokenHeader);
         try {
             JWT.decode(token);
         } catch (JWTDecodeException jwtDecodeException) {
             return false;
         }
         return true;
-
     }
 
-    public static Map<String, Claim> getClaims() {
+    public Map<String, Claim> getClaims() {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        assert requestAttributes != null;
-        String tokenHeader = requestAttributes.getRequest().getHeader("Authorization");
+        String tokenHeader = Objects.requireNonNull(requestAttributes).getRequest().getHeader(jwtProperties.getHeader());
         String token = getTokenByTokenHeader(tokenHeader);
         return JWT.decode(token).getClaims();
     }

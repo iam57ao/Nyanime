@@ -16,7 +16,8 @@ springdoc:
   swagger-ui:
     enabled: ${nyanime.swagger.enable}
     path: ${nyanime.swagger.path}
-jwt:
-  header: Authorization
-  secret: "a7309fe8-15df-4b88-a896-35146579e80d"
-  expire-time: 86400000
+nyanime:
+  jwt:
+    header: ${nyanime.jwt.header}
+    secret: ${nyanime.jwt.secret}
+    expire-time: ${nyanime.jwt.expire-time}

@@ -24,6 +24,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class UserController {
     private UserService userService;
+    private JWTUtil jwtUtil;
 
     @Operation(summary = "用户登录")
     @PostMapping("/login")
@@ -34,7 +35,7 @@ public class UserController {
     @Operation(summary = "个人信息")
     @GetMapping
     public UserVO info() {
-        Map<String, Claim> claims = JWTUtil.getClaims();
+        Map<String, Claim> claims = jwtUtil.getClaims();
         Integer id = claims.get("id").asInt();
         return userService.getById(id);
     }

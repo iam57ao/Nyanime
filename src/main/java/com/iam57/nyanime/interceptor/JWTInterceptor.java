@@ -23,11 +23,12 @@ import java.util.Objects;
 @AllArgsConstructor
 public class JWTInterceptor implements HandlerInterceptor {
     private JWTProperties jwtProperties;
+    private JWTUtil jwtUtil;
 
     @Override
     public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) throws Exception {
         String authHeader = request.getHeader(jwtProperties.getHeader());
-        if (Objects.isNull(authHeader) || !JWTUtil.parseJWT(authHeader)) {
+        if (Objects.isNull(authHeader) || !jwtUtil.parseJWT(authHeader)) {
             response.setContentType("application/json");
             response.setCharacterEncoding("utf-8");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

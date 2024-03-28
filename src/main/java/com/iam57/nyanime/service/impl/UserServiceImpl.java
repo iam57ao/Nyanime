@@ -8,7 +8,6 @@ import com.iam57.nyanime.mapper.UserMapper;
 import com.iam57.nyanime.pojo.dto.UserLoginDTO;
 import com.iam57.nyanime.pojo.entity.User;
 import com.iam57.nyanime.pojo.vo.UserVO;
-import com.iam57.nyanime.properties.JWTProperties;
 import com.iam57.nyanime.service.UserService;
 import com.iam57.nyanime.util.JWTUtil;
 import com.iam57.nyanime.util.StringUtil;
@@ -31,9 +30,9 @@ import java.util.Objects;
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
-    private JWTProperties jwtProperties;
     private PasswordEncoder passwordEncoder;
     private UserMapper userMapper;
+    private JWTUtil jwtUtil;
 
     @Override
     public boolean initSuperAdminUser() {
@@ -79,7 +78,7 @@ public class UserServiceImpl implements UserService {
         Map<String, Object> claim = new HashMap<>();
         claim.put("id", user.getId());
         claim.put("user_type", user.getUserType());
-        return JWTUtil.createToken(claim, jwtProperties.getSecret(), jwtProperties.getExpireTime());
+        return jwtUtil.createToken(claim);
     }
 
     @Override
